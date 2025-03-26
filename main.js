@@ -43,8 +43,9 @@ server.get('/overlay/status', (req, res) => {
 });
 
 // Start server
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+
+server.listen(PORT, '0.0.0.0', () => { // Bind to 0.0.0.0 instead of localhost
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
     console.log(`Control your overlay from GitHub Pages at https://yourusername.github.io/performance-overlay-controller`);
 });
 
