@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Overlay Controller</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .start {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .stop {
+            background-color: #f44336;
+            color: white;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .offline {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        .online {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Performance Overlay Controller</h1>
+        <div class="controls">
+            <button class="start" onclick="startOverlay()">Start Overlay</button>
+            <button class="stop" onclick="stopOverlay()">Stop Overlay</button>
+        </div>
+        <div id="status" class="status offline">Overlay Status: Offline</div>
+    </div>
+
+    <script>
+        const SERVER_URL = "http://localhost:3000"; // Update with your server URL when deployed
+        let overlayStatus = false;
+
+        // Check initial status
+        checkStatus();
+
+        function startOverlay() {
+            fetch(`${SERVER_URL}/overlay/start`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus(data.status === 'running');
+                })
+                .catch(error => {
+                    console.error('Error starting overlay:', error);
+                    alert('Failed to start overlay. Is the server running?');
+                });
+        }
+
+        function stopOverlay() {
+            fetch(`${SERVER_URL}/overlay/stop`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus(data.status === 'running');
+                })
+                .catch(error => {
+                    console.error('Error stopping overlay:', error);
+                });
+        }
+
+        function checkStatus() {
+            fetch(`${SERVER_URL}/overlay/status`)
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus(data.status === 'running');
+                })
+                .catch(error => {
+                    console.error('Error checking status:', error);
+                    document.getElementById('status').textContent = 'Overlay Status: Cannot connect to server';
+                });
+        }
+
+        function updateStatus(isRunning) {
+            overlayStatus = isRunning;
+            const statusEl = document.getElementById('status');
+            
+            if (isRunning) {
+                statusEl.textContent = 'Overlay Status: Online';
+                statusEl.className = 'status online';
+            } else {
+                statusEl.textContent = 'Overlay Status: Offline';
+                statusEl.className = 'status offline';
+            }
+        }
+
+        // Periodically check status
+        setInterval(checkStatus, 5000);
+    </script>
+</body>
+</html>

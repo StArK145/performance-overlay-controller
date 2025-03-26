@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Overlay Controller</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Performance Overlay Controller</h1>
+        
+        <div class="setup-instructions" id="setupInstructions">
+            <h2>First-time Setup</h2>
+            <ol>
+                <li>Download the Performance Overlay application
+                    <a href="https://github.com/yourusername/performance-overlay/releases/latest" 
+                       class="download-btn" target="_blank">Download App</a>
+                </li>
+                <li>Extract and run the application on your computer</li>
+                <li>Enter your local server address:
+                    <div class="server-input">
+                        <input type="text" id="serverUrl" placeholder="http://localhost:3000" value="http://localhost:3000">
+                        <button onclick="saveServerUrl()">Connect</button>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        
+        <div class="controls">
+            <button class="start" onclick="startOverlay()">Start Overlay</button>
+            <button class="stop" onclick="stopOverlay()">Stop Overlay</button>
+        </div>
+        
+        <div id="status" class="status offline">Overlay Status: Offline</div>
+        
+        <div class="connection-error" id="connectionError" style="display: none;">
+            <h3>Cannot Connect to Overlay Application</h3>
+            <p>Make sure you have:</p>
+            <ol>
+                <li>Downloaded and started the overlay application</li>
+                <li>Entered the correct server address (usually http://localhost:3000)</li>
+                <li>Allowed connections in your firewall if necessary</li>
+            </ol>
+            <button onclick="checkConnection()">Try Again</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Performance Overlay Controller | <a href="https://github.com/yourusername/performance-overlay" target="_blank">View on GitHub</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
